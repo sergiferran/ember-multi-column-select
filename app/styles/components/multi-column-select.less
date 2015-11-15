@@ -1,0 +1,84 @@
+@import "bootstrap";
+
+@mcs-background: #6c7279;
+@mcs-not-selected-color: #61666d;
+@mcs-selected-color: #70cf32;
+@mcs-column-title-color: #9fa8ac;
+@mcs-item-text-color: #FFF;
+@mcs-item-border-color: #5B5F63;
+@mcs-no-content-color: #9fa8ac;
+
+.multi-column-select {
+    display: inline-block;
+    .mcs-trigger {
+    }
+
+    .mcs-container {
+        background-color: @mcs-background;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        position: absolute;
+        margin: 10px 0 0 0;
+        z-index: 100;
+        white-space: nowrap;
+        
+    }
+    .mcs-column {
+        display: inline-block;
+        vertical-align: top;
+        text-align: left;
+        .mcs-column-title {
+            color: @mcs-column-title-color;
+            padding: 10px 15px;
+        }
+    }
+
+
+    .mcs-item {
+        padding: 10px 15px;
+        color: @mcs-item-text-color;
+        cursor: pointer;
+        white-space: nowrap;
+
+        .mcs-item-check {
+            color: @mcs-not-selected-color;
+        }
+
+        .mcs-item-text {
+            margin: 0 15px;
+        }
+
+        &.hover {
+            background-color: @mcs-selected-color;
+            &.selected {
+                .mcs-item-check {
+                    color: @mcs-item-text-color;
+                }
+            }
+        }
+
+        &.selected {
+            .mcs-item-check {
+                color: @mcs-selected-color;
+            }
+        }
+
+        &:not(:last-child){
+            border-bottom: 1px solid @mcs-item-border-color;
+        }
+    }
+
+    .mcs-no-content {
+        font-style: italic;
+        margin: 20px;
+        color: @mcs-no-content-color;
+    }
+}
+
+@media (max-width: @screen-xs-max) { 
+    .multi-column-select {
+        .mcs-column {
+            display: block;
+        }
+    }
+}

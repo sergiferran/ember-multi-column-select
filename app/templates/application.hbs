@@ -1,3 +1,69 @@
-<h2 id="title">Welcome to Ember.js</h2>
 
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<h2 id="title">Multi column and multi select component</h2>
+
+			<p>
+				Features:
+				<ul>
+					<li>You can customize your trigger as you want</li>
+					<li>You can customize your select passing your main class in 'classNames' property</li>
+					<li>If column title is not set, then is not shown</li>
+					<li>If screen is small, multi column are shown one below other</li>
+					<li>Data is bound in one-way binding, that means when select is closed, an action is called to replace or not the content</li>
+					<li>Select is left aligned with the trigger unless its width is higer than available screen width, then is right aligned with the trigger</li>
+				</ul>
+			</p>
+
+		</div>
+	</div>
+<hr>
+	<div class="row">
+		<div class="col-xs-6 text-left">
+			{{#multi-column-select data=firstData action="select1Action"}}
+				<button class="btn btn-success" type="button" aria-haspopup="true">
+				    Dimensions + Options
+				    <span class="caret"></span>
+			  	</button>
+  			{{/multi-column-select}}
+		</div>
+		<div class="col-xs-6 text-right">
+			{{#multi-column-select data=secondData action="select2Action"}}
+				<input class="btn btn-default" type="button" value="Options" />
+			{{/multi-column-select}}
+		</div>
+	</div>
+	<div class="row margin-vertical-10">
+		<div class="col-xs-6 text-right">
+			{{#multi-column-select classNames="custom-mcs" data=firstData action="select1Action"}}
+				<button class="btn btn-default" type="button" aria-haspopup="true">
+				    Class Customized
+			  	</button>
+  			{{/multi-column-select}}
+		</div>
+		<div class="col-xs-6 text-left">
+			{{#multi-column-select}}
+				<input class="btn btn-info" type="button" value="No content" />
+			{{/multi-column-select}}
+		</div>
+	</div>
+	<hr>
+</div>
+<div class="container">
+	<div class="row margin-vertical-10">
+		<div class="col-xs-12">
+			<h3>Dimensions values (click to toggle value)</h3>
+			{{#each dataColumn1 as |item|}}
+				<span class="label label-{{if item.selected 'success' 'danger'}}" {{action 'toggleItem' item}}>{{item.text}}</span>
+			{{/each}}
+		</div>
+		<div class="col-xs-12">
+			<h3>Options values (click to toggle value)</h3>
+			{{#each dataColumn2 as |item|}}
+				<span class="label label-{{if item.selected 'success' 'danger'}}" {{action 'toggleItem' item}}>{{item.text}}</span>
+			{{/each}}
+		</div>
+	</div>
+</div>
 {{outlet}}

@@ -1,0 +1,24 @@
+<div class="mcs-trigger" {{action 'toggle'}}>
+	{{~yield~}}
+</div>
+{{#if isSelectVisible}}
+	<div class="mcs-container" >
+		{{~#each _data as |column columnIndex|~}}
+			<div class="mcs-column">
+				{{#if column.title}}
+					<div class="mcs-column-title">{{column.title}}</div>
+				{{/if}}
+				{{#each column.data as |item|}}
+					<div class="mcs-item {{if item.selected 'selected'}} {{if item.hover 'hover'}}" {{action 'toggleItem' item columnIndex}}>
+						<span class="glyphicon glyphicon-ok mcs-item-check" aria-hidden="true"></span>
+						<span class="mcs-item-text">{{item.text}}</span>
+					</div>
+				{{/each}}
+			</div>
+		{{else}}
+			<div class="mcs-column">
+				<div class="mcs-no-content">There isn't any data set</div>
+			</div>
+		{{~/each~}}
+	</div>
+{{/if}}
