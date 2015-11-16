@@ -2,6 +2,14 @@ import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 import asyncHelper from '../../helpers/asyncHelper';
 
+// PhantomJS doesn't support bind yet
+Function.prototype.bind = Function.prototype.bind || function(thisp) {
+  var fn = this;
+  return function() {
+    return fn.apply(thisp, arguments);
+  };
+};
+  
 moduleForComponent('multi-column-select', 'Integration | Component | multi column select', {
   integration: true
 });
@@ -191,7 +199,7 @@ test('select should be right aligned with trigger when is at right', function(as
   return asyncHelper(()=>{
     return this.$('.mcs-container').offset().left!== $trigger.offset().left;
   }).then(()=>{
-    assert.equal(this.$('.mcs-container').offset().left, 500 - this.$('.mcs-container').width(), 'left is the same');
+    assert.equal(Math.round(this.$('.mcs-container').offset().left), Math.round(500 - this.$('.mcs-container').width()), 'left is the same');
   });
 
 });

@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-let itemObject = Ember.Object.extend({
+const itemObject = Ember.Object.extend({
 	text: null,
 	selected: false,
 	hover: false,
@@ -13,37 +13,37 @@ export default Ember.Component.extend({
 
 	isSelectVisible: null,
 
-	_data: function() {
+	_data: Ember.computed('data', function() {
 		return (this.get('data') || []).map((column) => {
 			return {
 				title: column.title,
 				data: column.data.map((item) => itemObject.create(item))
 			};
 		});
-	}.property('data'),
+	}),
 
-	clickOutsideFn: function() {
+	clickOutsideFn: Ember.computed(function() {
 		return function(ev) {
-			var $target = Ember.$(ev.target);
-			var $parent = $target.parents('.multi-column-select');
+			let $target = Ember.$(ev.target);
+			let $parent = $target.parents('.multi-column-select');
 			if (!$parent[0] || !$parent.is(this.$())) {
 				this.send('close');
 			}
 		}.bind(this);
-	}.property(),
+	}),
 
-	checkPositionFn: function() {
+	checkPositionFn: Ember.computed(function() {
 		return function() {
 			if (this.get('isSelectVisible')) {
-				var $app = Ember.$('.ember-application');
-				var appLeft = $app.offset().left;
-				var $trigger = this.$('.mcs-trigger');
-				var triggerWidth = $trigger.width();
-				var $container = this.$('.mcs-container');
-				var left = $trigger.offset().left - appLeft;
-				var width = $container.width();
-				var availableWidth = $app.width();
-				var newLeft;
+				let $app = Ember.$('.ember-application');
+				let appLeft = $app.offset().left;
+				let $trigger = this.$('.mcs-trigger');
+				let triggerWidth = $trigger.width();
+				let $container = this.$('.mcs-container');
+				let left = $trigger.offset().left - appLeft;
+				let width = $container.width();
+				let availableWidth = $app.width();
+				let newLeft;
 				if (left + width < availableWidth) {
 					newLeft = left;
 				} else if (left + triggerWidth - width > 0) {
@@ -56,13 +56,13 @@ export default Ember.Component.extend({
 				});
 			}
 		}.bind(this);
-	}.property(),
+	}),
 
-	onInit: function() {
+	onInit: Ember.on('didInsertElement', function() {
 		Ember.$(window).on('resize', this.get('checkPositionFn'));
-	}.on('didInsertElement'),
+	}),
 
-	willDestroy: function() {
+	willDestroy() {
 		Ember.$(window).off('resize', this.get('checkPositionFn'));
 		Ember.$(document).off('click', this.get('clickOutsideFn'));
 		return this._super(...arguments);
@@ -79,35 +79,35 @@ export default Ember.Component.extend({
 		}, 100);
 	}.observes('isSelectVisible'),
 
-	resetHover: function(column) {
+	resetHover(column) {
 		this.get(`_data.${column}.data`).setEach('hover', false);
 	},
 
-	closeSelect: function() {
-		var data= this.get('_data');
-		if(!Ember.isEmpty(data)){
+	closeSelect() {
+		let data = this.get('_data');
+		if (!Ember.isEmpty(data)) {
 			this.sendAction('action', data);
 		}
 	},
 
 	actions: {
-		toggle: function() {
-			this.toggleProperty('isSelectVisible');
-			if (!this.get('isSelectVisible')) {
+		toggle() {
+				this.toggleProperty('isSelectVisible');
+				if (!this.get('isSelectVisible')) {
+					this.closeSelect();
+				}
+			},
+			close() {
+				this.set('isSelectVisible', false);
 				this.closeSelect();
-			}
-		},
-		close: function() {
-			this.set('isSelectVisible', false);
-			this.closeSelect();
-			this.get('_data').forEach((item, column) => {
+				this.get('_data').forEach((item, column) => {
+					this.resetHover(column);
+				});
+			},
+			toggleItem(item, column) {
 				this.resetHover(column);
-			});
-		},
-		toggleItem: function(item, column) {
-			this.resetHover(column);
-			item.toggleProperty('selected');
-			item.set('hover', true);
-		}
+				item.toggleProperty('selected');
+				item.set('hover', true);
+			}
 	}
 });
